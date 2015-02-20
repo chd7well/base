@@ -14,18 +14,19 @@ namespace chd7well\master\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%master_unit}}".
+ * This is the model class for table "{{%master_modelname}}".
  *
+
  * @author Christian Dumhart <christian.dumhart@chd.at>
  */
-class Unit extends \yii\db\ActiveRecord
+class Modelname extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%master_unit}}';
+        return '{{%master_modelname}}';
     }
 
     /**
@@ -34,8 +35,8 @@ class Unit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['unit'], 'required'],
-            [['unit'], 'string', 'max' => 255],
+            [['modelname'], 'required'],
+            [['modelname'], 'string', 'max' => 255],
         ];
     }
 
@@ -46,9 +47,20 @@ class Unit extends \yii\db\ActiveRecord
     {
         return [
             'ID' => Yii::t('master', 'ID'),
-            'title' => Yii::t('master', 'Unit'),
+            'modelname' => Yii::t('master', 'Model name'),
         ];
     }
 
+    public static function getModelnameID($modelname)
+    {
+    	$model = Modelname::findOne(['modelname'=>$modelname]);
+    	if(!isset($model) || $model == null)
+    	{
+    		$model = new Modelname();
+    		$model->modelname = $modelname;
+    		$model->save();
+    	}
+    	return $model->ID;
+    }
     
 }

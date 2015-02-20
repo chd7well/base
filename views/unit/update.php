@@ -11,7 +11,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use chd7well\master\widgets\HistoryWidget;
 /**
  * @var yii\web\View                 $this
  * @var chd7well\configmanager\models\Parameter    $parameter
@@ -53,4 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-<?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); 
+echo HistoryWidget::widget(['modelname' => $unit->className(),
+							'model_ID' => $unit->ID]);
+
+?>
+
+                        

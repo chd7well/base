@@ -20,6 +20,7 @@ use yii\helpers\Json;
 use yii\filters\AccessControl;
 use chd7well\master\models\Unit;
 use chd7well\master\models\UnitSearch;
+use chd7well\master\models\Modellog;
 
 
 /**
@@ -59,6 +60,7 @@ class UnitController extends Controller
 				// can save model or do something before saving model
 				if(isset($posted['unit']))
 				{
+					Modellog::logAction($model->className(), $model->ID, \Yii::$app->user->identity->ID, Modellog::ACTION_UPDATE, "Updated Unit to " . $model->unit);
 					$model->update(true, ['unit']);
 				}
 		
@@ -89,6 +91,7 @@ class UnitController extends Controller
 	public function actionUpdate($id) {
 		$model = $this->findModel( $id );
 		if ($model->load ( \Yii::$app->request->post () ) && $model->save ()) {
+			Modellog::logAction($model->className(), $id, \Yii::$app->user->identity->ID, Modellog::ACTION_UPDATE, "Updated Unit");
 			return $this->redirect ( [ 
 					'index',
 			] );
@@ -108,6 +111,7 @@ class UnitController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+			Modellog::logAction($model->className(), $id, \Yii::$app->user->identity->ID, Modellog::ACTION_DELETE, "Deleted Unit");
 			$this->findModel($id)->delete();
 			return $this->redirect(['index']);
 	}
@@ -126,6 +130,7 @@ class UnitController extends Controller
 	
 		if ($unit->load(\Yii::$app->request->post()) && $unit->save()) {
 			\Yii::$app->getSession()->setFlash('success', \Yii::t('master', 'Unit has been created'));
+			Modellog::logAction($model->className(), $unit->ID, \Yii::$app->user->identity->ID, Modellog::ACTION_CREATE, "Created new Unit");
 			return $this->redirect(['index']);
 		}
 	

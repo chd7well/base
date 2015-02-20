@@ -19,7 +19,8 @@ use yii\db\ActiveRecord;
 
 class Bootstrap implements BootstrapInterface
 {
-	public $activity_table = 'master_model_activity';
+
+	public $enable_logging = true;
 	
     public function bootstrap($app)
     {
@@ -27,24 +28,16 @@ class Bootstrap implements BootstrapInterface
     }
     
     
-    public function activityLogger($event)
-    {
-    	\Yii::$app->db->createCommand('INSERT INTO ' . 
-    								   $this->activity_table .
-    								'(`modelname`, `event`, `modelID`, `userID`, `timestamp`) VALUES (' .
-    								'\'' . addslashes ( $event->sender->className()) . '\',' .
-    								'\'' . $event->name . '\',' .
-    								'\'' . $event->sender->__get('ID') . '\',' .
-    								'\'' . \Yii::$app->user->identity->ID . '\',' .
-    								'NOW());'
-    			)->query();
-    }
+
     
     protected function addActivityLogger()
     {
-    	Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_FIND, [$this, 'activityLogger']);
-    	Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_INSERT, [$this, 'activityLogger']);
-    	Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'activityLogger']);
-    	Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_DELETE, [$this, 'activityLogger']);
+    	if($this->enable_logging)
+    	{
+    		Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_FIND, ['chd7well\master\Module', 'activityLogger']);
+    		Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_INSERT, ['chd7well\master\Module', 'activityLogger']);
+    		Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_UPDATE, ['chd7well\master\Module', 'activityLogger']);
+    		Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_DELETE, ['chd7well\master\Module', 'activityLogger']);
+    	}
     }
 }
