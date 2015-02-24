@@ -18,8 +18,20 @@ class HistoryWidget extends Widget
 	public function run()
 	{
 		//return Html::encode($this->message);
-		$modelname_id = Modelname::getModelnameID($this->modelname);
-		$history = Modellog::find()->where(['modelname_ID'=>$modelname_id, 'model_ID'=>$this->model_ID])->orderBy(['timestamp'=>SORT_DESC])->all();
+		if(is_array($this->modelname))
+		{
+			$modelnamesid = [];
+			foreach($this->modelname as $mname)
+			{
+				$modelnamesid[] = Modelname::getModelnameID($mname);
+			}
+			$history = Modellog::find()->where(['modelname_ID'=>$modelnamesid, 'model_ID'=>$this->model_ID])->orderBy(['timestamp'=>SORT_DESC])->all();
+		}
+		else {
+			$modelname_id = Modelname::getModelnameID($this->modelname);
+			$history = Modellog::find()->where(['modelname_ID'=>$modelname_id, 'model_ID'=>$this->model_ID])->orderBy(['timestamp'=>SORT_DESC])->all();
+		}
+		
 		return $this->render('history', [
 				'history'  => $history
 		]);
