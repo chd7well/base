@@ -30,6 +30,7 @@ class Modellog extends \yii\db\ActiveRecord
 	const ACTION_DELETE = 3;
 	const ACTION_VIEW = 4;
 	const ACTION_STORNO = 5;
+	const ACTION_DISABLED = 6;
 	const ACTION_SEND_EMAIL = 20;
 	
     /**
@@ -77,6 +78,7 @@ class Modellog extends \yii\db\ActiveRecord
     			Modellog::ACTION_DELETE => 	Yii::t('master', 'delete'),
     			Modellog::ACTION_VIEW => 	Yii::t('master', 'view'),
     			Modellog::ACTION_STORNO => 	Yii::t('master', 'storno'),
+    			Modellog::ACTION_DISABLED => Yii::t('master', 'disabled'),
     			Modellog::ACTION_SEND_EMAIL => 	Yii::t('master', 'sent email'),
     	];
     }
